@@ -2,110 +2,144 @@ import { Archive, ArchiveRestore, FilePenLine, Trash2 } from 'lucide-react'
 import React from 'react'
 import LoadMore from '../partials/LoadMore'
 import Pills from '../partials/Pills'
-
-
-
-import { setIsAdd, setIsConfirm, setIsDelete } from '@/components/Store/storeAction'
+import { setIsAdd, setIsArchive, setIsConfirm, setIsDelete, setIsRestore } from '@/components/Store/storeAction'
 import { StoreContext } from '@/components/Store/storeContext'
-
-import ModalConfirm from '../partials/modals/ModalConfirm'
-import ModalDelete from '../partials/modals/ModalDelete'
 import { menus } from '@/components/menu-data'
+import useQueryData from '@/components/custom-hook/useQueryData'
+import ModalRestore from '../../partials/modal/ModalRestore'
+import ModalArchive from '../../partials/modal/ModalArchive'
+import ModalDelete from '../../partials/modal/ModalDelete'
+import SpinnerTable from '../partials/spinners/SpinnerTable'
 
 
 
 const TshirtsTable = ({setItemEdit}) => {
      const { dispatch, store} = React.useContext(StoreContext);
-    
+     const [id, setId] = React.useState(null);
+     
    let counter = 1;
 
-  const handleDelete = () => {
-    dispatch(setIsDelete(true));
-    }
-  const handleRestore = () => {
-    dispatch(setIsConfirm(true));
-    }
-  const handleArchive = () => {
-    dispatch(setIsConfirm(true));
-    }
- 
+   const{
+    isLoading,
+    isFetching,
+    error,
+    data:result,
+    status,
+  } = useQueryData(
+    `/v2/tshirts`, //endpoint
+    "get", //method
+    "tshirts"// key
+  
+  );
+
   const handleEdit = (item) => {
-    dispatch(setIsAdd(true));
-    setItemEdit(item);
-    }
+     dispatch(setIsAdd(true));
+     setItemEdit(item);
+   };
+ 
+   const handleDelete = (item) => {
+     dispatch(setIsDelete(true));
+     setId(item.tshirts_aid);
+   };
+ 
+   const handleRestore = (item) => {
+     dispatch(setIsRestore(true));
+     setId(item.tshirts_aid);
+   };
+ 
+   const handleArchive = (item) => {
+     dispatch(setIsArchive(true));
+     setId(item.tshirts_aid);
+   };
+
+ 
+
+
   return (
     <>
     <div className='mt-10 bg-secondary rounded-md p-4 border border-line relative ' >
-                        {/* <SpinnerTable/> */}
-                    <div className='table-wrapper custom-scroll'>
-                   
-                   {/* <TableLoader count={7} cols={2}/> */}
-                   
-                    <table>
-                    <thead>
-                        <tr>
-                        <th> # </th>
-                        <th> Status </th>
-                        <th> Title </th>
-                        <th> Price </th>
-                        <th> Category </th>
-                        <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* <tr>
-                            <td colSpan={100}>
-                               <IconNoData/>
-                            </td>    
-                        </tr>
-                        <tr>
-                            
-                             <td colSpan={100}>
-                               <IconServerError/>
-                            </td>
-                            
-                        </tr> */}
-                  {menus.map ((item,key) =>(<tr  key={key}>
-                            <td>{counter++}.</td>
-                            <td><Pills/></td>
-                            <td>{item.menu_title}</td>
-                            <td>{item.menu_price}</td>
-                            <td>{item.menu_category}</td>
-                            
-                       
-                            <td>
-                                <ul className='table-action  '>
-                                    {true ? (
-                                 <>
-                                  
-                                    <li><button className='tooltip' data-tooltip="Edit" onClick={() => handleEdit(item)}><FilePenLine/></button></li>
-                                    <li><button className='tooltip' data-tooltip="Archive" onClick={()=>handleArchive()}><Archive /></button></li>
-                                </>) :(<>
-                                    <li><button className='tooltip' data-tooltip="Restore" onClick={()=>handleRestore()}><ArchiveRestore /></button></li>
-                                    <li><button className='tooltip' data-tooltip="Delete" onClick={()=>handleDelete()}><Trash2 /></button></li>
-                                </>)}
-                               
-                                    
-                                </ul>
-                            </td>
-                        </tr>
-                        ))}
+                      
+                        {!isLoading || (isFetching && <SpinnerTable />)}{" "}
+                      <div className="table-wrapper custom-scroll">
                         
-                        
-
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Status</th>
+                              <th className='w-[50%]'>Title</th>
+                              <th>Price</th>
+                              <th>Category</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {/* {((isLoading && !isFetching) || result?.data.length === 0) && (
+                                <tr>
+                                  <td colSpan="100%">
+                                    {isLoading ? (
+                                      <TableLoader count={30} cols={6} />
+                                    ) : (
+                                      <IconNoData />
+                                    )}
+                                  </td>
+                                </tr>
+                              )}
                            
-                    
-                       
+                           {error && (
+                                <tr>
+                                  <td colSpan="100%">
+                                    <IconServerError />
+                                  </td>
+                                </tr>
+                              )} */}
+                        
+                        
+                        {result?.count > 0 &&
+                          result.data.map((item, key) => (
+                            <tr key={key}>
+                              <td>{counter++}.</td>
+                              <td><Pills/></td>
+                              <td>{item.tshirts_title}</td>
+                              <td>{item.tshirts_price}</td>
+                              <td>{item.category_title}</td>
+                              <td>
+                                  <ul className='table-action  '>
+                                      {item.tshirts_is_active === 1 ? (
+                                   <>
+                                    
+                                      <li><button className='tooltip' data-tooltip="Edit" onClick={() => handleEdit(item)}><FilePenLine/></button></li>
+                                      <li><button className='tooltip' data-tooltip="Archive" onClick={()=>handleArchive(item)}><Archive /></button></li>
+                                  </>) :(<>
+                                      <li><button className='tooltip' data-tooltip="Restore" onClick={()=>handleRestore(item)}><ArchiveRestore /></button></li>
+                                      <li><button className='tooltip' data-tooltip="Delete" onClick={()=>handleDelete(item)}><Trash2 /></button></li>
+                                  </>)}  
+                                  </ul>
+                              </td>
+                            </tr>
+                        ))}  
                     </tbody>    
                     </table>    
 
                     <LoadMore/>
                     </div>
                     </div> 
-                  
-                    {store.isDelete && <ModalDelete/>}
-                     {store.isConfirm && <ModalConfirm/> }
-                     {store.isView && <ModalViewMovies movieInfo= {movieInfo}/> }
+
+                    {store.isDelete && <ModalDelete 
+                    setIsDelete={setIsDelete}
+                    mysqlApiDelete={`/v2/tshirts/${id}`}
+                    queryKey="tshirts"/>}                
+
+                    {store.isArchive && <ModalArchive 
+                    setIsArchive={setIsArchive}
+                    mysqlEndpoint={`/v2/tshirts/active/${id}`}
+                    queryKey="tshirts"/>}
+
+                    {store.isRestore && <ModalRestore
+                    setIsRestore={setIsRestore}
+                    mysqlEndpoint={`/v2/tshirts/active/${id}`}
+                    queryKey="tshirts"/>}
+
                     
                      </>
   )

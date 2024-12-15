@@ -1,29 +1,25 @@
-
+import { Plus } from 'lucide-react'
 import React from 'react'
-
+import Header from '../partials/Header'
 import Searchbar from '../partials/Searchbar'
-
-
+import Footer from '../partials/Footer'
+import SideNavigation from '../partials/SideNavigation'
+import CategoryTable from './CategoryTable'
 import { StoreContext } from '@/components/Store/storeContext'
 import { setIsAdd } from '@/components/Store/storeAction'
-
+import ModalAddCategory from './ModalAddCategory'
 import ToastSuccess from '../partials/ToastSuccess'
 import ModalError from '../partials/modals/ModalError'
 import ModalValidation from '../partials/modals/ModalValidation'
-import Header from '../partials/Header'
-
-import { Plus } from 'lucide-react'
-import AdsTable from './CategoryTable'
-import Footer from '../partials/Footer'
-import SideNavigation from '../partials/SideNavigation'
-import ModalAddCategory from './ModalAddCategory'
 
 
 
 
 const Category = () => {
     const { dispatch, store} = React.useContext(StoreContext);
+    const [ itemEdit,setItemEdit] = React.useState(null);
     const handleAdd = () => {dispatch(setIsAdd(true));
+        setItemEdit(null);
     }
   return (
     <>
@@ -39,7 +35,7 @@ const Category = () => {
                            <Plus size={16}/> Add New 
                         </button>
                     </div>  
-                    <AdsTable/>
+                    <CategoryTable setItemEdit ={setItemEdit} />
                 </div>
                 <Footer/>
             </main>
@@ -49,7 +45,7 @@ const Category = () => {
     {store.error && <ModalError/>}
      {store.success && <ToastSuccess/>}
     {/* {store.isView && <SpinnerWindow/>} */}
-    {store.isAdd && <ModalAddCategory/>}
+    {store.isAdd && <ModalAddCategory itemEdit = {itemEdit}/>}
     </>
   )
 }

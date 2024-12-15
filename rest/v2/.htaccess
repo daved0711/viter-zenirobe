@@ -1,0 +1,23 @@
+RewriteEngine On
+# use for authentication
+RewriteCond %{HTTP:Authorization} ^(.+)$
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+Header set Access-Control-Allow-Origin *
+ 
+
+
+### Category ###
+RewriteRule ^category$ controllers/category/category.php [L]
+RewriteRule ^category/([0-9]+)$ controllers/category/category.php?categoryid=$1 [L]
+RewriteRule ^category/active/([0-9]+)$ controllers/category/active.php?categoryid=$1 [L]
+RewriteRule ^category/search$ controllers/category/search.php [L]
+RewriteRule ^category/page/([0-9]+)$ controllers/category/page.php?start=$1 [L]
+
+RewriteRule ^tshirts$ controllers/tshirts/tshirts.php [L]
+RewriteRule ^tshirts/([0-9]+)$ controllers/tshirts/tshirts.php?tshirtsid=$1 [L]
+RewriteRule ^tshirts/active/([0-9]+)$ controllers/tshirts/active.php?tshirtsid=$1 [L]
+RewriteRule ^tshirts/search$ controllers/tshirts/search.php [L]
+RewriteRule ^tshirts/page/([0-9]+)$ controllers/tshirts/page.php?start=$1 [L]

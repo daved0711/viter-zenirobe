@@ -20,7 +20,8 @@ import Footer from '../partials/Footer'
 const Tshirts = () => {
     const { dispatch, store} = React.useContext(StoreContext);
     const [ itemEdit,setItemEdit] = React.useState(null);
-    const handleAdd = () => {dispatch(setIsAdd(true));
+    const handleAdd = () => {
+      dispatch(setIsAdd(true));
         setItemEdit(null);
     }
   return (
@@ -47,7 +48,7 @@ const Tshirts = () => {
     {store.error && <ModalError/>}
      {store.success && <ToastSuccess/>}
     {/* {store.isView && <SpinnerWindow/>} */}
-    {store.isAdd && <ModalAddTshirts itemEdit = {itemEdit}/>}
+    {store.isAdd && <ModalAddTshirts itemEdit = {itemEdit} />}
     </>
   )
 }
