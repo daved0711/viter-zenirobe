@@ -1,25 +1,32 @@
-import React from 'react'
-import ModalWrapper from '../partials/modals/ModalWrapper'
-import { ImagePlusIcon, X } from 'lucide-react'
-import SpinnerButton from '../partials/spinners/SpinnerButton'
-import { StoreContext } from '@/components/Store/storeContext'
-import { setError, setIsAdd, setMessage, setSuccess } from '@/components/Store/storeAction'
-import { Form, Formik } from 'formik'
+import React from "react";
+import ModalWrapper from "../partials/modals/ModalWrapper";
+import { ImagePlusIcon, X } from "lucide-react";
+import SpinnerButton from "../partials/spinners/SpinnerButton";
+import { StoreContext } from "@/components/Store/storeContext";
+import {
+  setError,
+  setIsAdd,
+  setMessage,
+  setSuccess,
+} from "@/components/Store/storeAction";
+import { Form, Formik } from "formik";
 import * as Yup from "Yup";
-import useUploadPhoto from '@/components/custom-hook/useUploadPhoto'
+import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
 
-import { InputPhotoUpload, InputSelect, InputText } from '@/components/helpers/FormInputs'
-import { imgPath } from '@/components/helpers/functions-general'
-import useQueryData from '@/components/custom-hook/useQueryData'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { queryData } from '@/components/helpers/queryData'
+import {
+  InputPhotoUpload,
+  InputSelect,
+  InputText,
+} from "@/components/helpers/FormInputs";
+import { imgPath } from "@/components/helpers/functions-general";
+import useQueryData from "@/components/custom-hook/useQueryData";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryData } from "@/components/helpers/queryData";
 
-const ModalAddTshirtss = ({ setItemEdit }) => {
-
+const ModalAddclothess = ({ setItemEdit }) => {
   const { dispatch } = React.useContext(StoreContext);
   const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
   const [value, setValue] = React.useState("");
-
 
   const handleClose = () => {
     dispatch(setIsAdd(false));
@@ -31,28 +38,25 @@ const ModalAddTshirtss = ({ setItemEdit }) => {
   const {
     isFetching,
     error,
-    data: tshirts,
+    data: clothes,
     status,
   } = useQueryData(
-    `/v2/tshirts`, //endpoint
+    `/v2/clothes`, //endpoint
     "get", //method
-    "tshirts" //key
+    "clothes" //key
   );
-
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (values) =>
       queryData(
-        setItemEdit
-          ? `/v2/tshirts/${setItemEdit.tshirts_aid}`
-          : "/v2/tshirts",
+        setItemEdit ? `/v2/clothes/${setItemEdit.clothes_aid}` : "/v2/clothes",
         setItemEdit ? "PUT" : "POST",
         values
       ),
     onSuccess: (data) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["tshirts"] });
+      queryClient.invalidateQueries({ queryKey: ["clothes"] });
       // show error box
       if (!data.success) {
         dispatch(setError(true));
@@ -68,45 +72,44 @@ const ModalAddTshirtss = ({ setItemEdit }) => {
   });
 
   const initVal = {
-    tshirts_title: setItemEdit ? setItemEdit.tshirts_title : "",
-    // tshirts_image: setItemEdit ? setItemEdit.tshirts_image : "",
-    tshirts_category_id: setItemEdit ? setItemEdit.tshirts_category_id : "",
-    tshirts_price: setItemEdit ? setItemEdit.tshirts_price : "",
+    clothes_title: setItemEdit ? setItemEdit.clothes_title : "",
+    // clothes_image: setItemEdit ? setItemEdit.clothes_image : "",
+    clothes_category_id: setItemEdit ? setItemEdit.clothes_category_id : "",
+    clothes_price: setItemEdit ? setItemEdit.clothes_price : "",
   };
 
   const yupSchema = Yup.object({
-    tshirts_title: Yup.string().required("Required"),
-    tshirts_category_id: Yup.string().required("Required"),
-    tshirts_price: Yup.string().required("Required"),
+    clothes_title: Yup.string().required("Required"),
+    clothes_category_id: Yup.string().required("Required"),
+    clothes_price: Yup.string().required("Required"),
   });
-
 
   return (
     <>
       <ModalWrapper>
         <div className="modal-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0">Add Tshirtss</h5>
+            <h5 className="mb-0">Add clothess</h5>
             <button onClick={handleClose}>
               <X />
             </button>
           </div>
           <Formik
-           initialValues={initVal}
-           validationSchema={yupSchema}
-           onSubmit={async (values) => {
-             mutation.mutate({
-               ...values,
-               tshirts_image:
-                 (setItemEdit?.tshirts_image === "" && photo) ||
-                 (!photo && "") ||
-                 (photo === undefined && "") ||
-                 (photo && setItemEdit?.tshirts_image !== photo?.name)
-                   ? photo?.name || ""
-                   : setItemEdit?.tshirts_image || "",
-             });
-             uploadPhoto();
-           }}
+            initialValues={initVal}
+            validationSchema={yupSchema}
+            onSubmit={async (values) => {
+              mutation.mutate({
+                ...values,
+                clothes_image:
+                  (setItemEdit?.clothes_image === "" && photo) ||
+                  (!photo && "") ||
+                  (photo === undefined && "") ||
+                  (photo && setItemEdit?.clothes_image !== photo?.name)
+                    ? photo?.name || ""
+                    : setItemEdit?.clothes_image || "",
+              });
+              uploadPhoto();
+            }}
           >
             {(props) => {
               return (
@@ -117,11 +120,11 @@ const ModalAddTshirtss = ({ setItemEdit }) => {
                         <InputText
                           label="Title"
                           type="text"
-                          name="tshirts_title"
+                          name="clothes_title"
                           onChange={handleChange}
                         />
                       </div>
-                     
+
                       <div className="input-wrap relative  group input-photo-wrap h-[150px] ">
                         <label htmlFor="">Photo</label>
                         {setItemEdit === null && photo === null ? (
@@ -140,9 +143,9 @@ const ModalAddTshirtss = ({ setItemEdit }) => {
                             src={
                               photo
                                 ? URL.createObjectURL(photo) // preview
-                                : imgPath + "/" + setItemEdit?.tshirts_image // check db
+                                : imgPath + "/" + setItemEdit?.clothes_image // check db
                             }
-                            alt="tshirts photo"
+                            alt="clothes photo"
                             className={`group-hover:opacity-30 duration-200 relative object-cover h-full w-full  m-auto ${
                               mutation.isPending
                                 ? "opacity-40 pointer-events-none"
@@ -150,7 +153,7 @@ const ModalAddTshirtss = ({ setItemEdit }) => {
                             }`}
                           />
                         )}
-                       
+
                         <InputPhotoUpload
                           name="photo"
                           type="file"
@@ -163,22 +166,23 @@ const ModalAddTshirtss = ({ setItemEdit }) => {
                         />
                       </div>
 
-
                       <div className="input-wrap">
                         <InputSelect
-                          label="Tshirts Category"
+                          label="clothes Category"
                           type="text"
-                          name="tshirts_category_id"
+                          name="clothes_category_id"
                           onChange={handleChange}
                         >
-                          <option value="hidden">Select Category</option>
-                          {tshirts?.data.map((item, key) => {
+                          <option value="" hidden>
+                            Select Category
+                          </option>
+                          {clothes?.data.map((item, key) => {
                             return (
                               <>
                                 {item.category_is_active === 1 && (
                                   <option key={key} value={item.category_aid}>
-                                  {item.category_title}
-                                </option>
+                                    {item.category_title}
+                                  </option>
                                 )}
                               </>
                             );
@@ -186,12 +190,11 @@ const ModalAddTshirtss = ({ setItemEdit }) => {
                         </InputSelect>
                       </div>
 
-
                       <div className="input-wrap">
                         <InputText
                           label="Price"
                           type="text"
-                          name="tshirts_price"
+                          name="clothes_price"
                           onChange={handleChange}
                         />
                       </div>
@@ -220,5 +223,4 @@ const ModalAddTshirtss = ({ setItemEdit }) => {
   );
 };
 
-
-export default ModalAddTshirtss
+export default ModalAddclothess;

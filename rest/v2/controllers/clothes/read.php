@@ -3,21 +3,21 @@
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$tshirts = new Tshirts ($conn);
+$clothes = new clothes($conn);
 // get $_GET data
 $error = [];
 $returnData = [];
 
-if (array_key_exists("tshirtsid", $_GET)) {
-  $tshirts->tshirts_aid = $_GET['tshirtsid'];
-  checkId($tshirts->tshirts_aid);
-  $query = checkReadById($tshirts);
+if (array_key_exists("clothesid", $_GET)) {
+  $clothes->clothes_aid = $_GET['clothesid'];
+  checkId($clothes->clothes_aid);
+  $query = checkReadById($clothes);
   http_response_code(200);
   getQueriedData($query);
 }
 
 if (empty($_GET)) {
-  $query = checkReadAll($tshirts);
+  $query = checkReadAll($clothes);
   http_response_code(200);
   getQueriedData($query);
 }

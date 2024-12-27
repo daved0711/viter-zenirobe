@@ -5,13 +5,13 @@ require '../../core/header.php';
 require '../../core/functions.php';
 // require 'functions.php';
 // use needed classes
-require '../../models/tshirts/Tshirts.php';
+require '../../models/clothes/Clothes.php';
 // check database connection
 
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$tshirts = new Tshirts($conn);
+$clothes = new Clothes($conn);
 // get payload
 $body = file_get_contents("php://input");
 $data = json_decode($body, true);
@@ -19,15 +19,15 @@ $data = json_decode($body, true);
 // validate api key
 if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
   //checkApiKey();
-  if (array_key_exists("tshirtsid", $_GET)) {
+  if (array_key_exists("clothesid", $_GET)) {
     // check data
     checkPayload($data);
-    $tshirts->tshirts_aid = $_GET['tshirtsid'];
-    $tshirts->tshirts_is_active = trim($data["isActive"]);
-    checkId($tshirts->tshirts_aid);
-    $query = checkActive($tshirts);
+    $clothes->clothes_aid = $_GET['clothesid'];
+    $clothes->clothes_is_active = trim($data["isActive"]);
+    checkId($clothes->clothes_aid);
+    $query = checkActive($clothes);
     http_response_code(200);
-    returnSuccess($tshirts, "tshirts", $query);
+    returnSuccess($clothes, "clothes", $query);
   }
   // return 404 error if endpoint not available
   checkEndpoint();

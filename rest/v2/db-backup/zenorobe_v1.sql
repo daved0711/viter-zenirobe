@@ -47,10 +47,10 @@ INSERT INTO `zenorobe_category` (`category_aid`, `category_is_active`, `category
 -- --------------------------------------------------------
 
 --
--- Table structure for table `zenorobe_tshirts`
+-- Table structure for table `zenorobe_clothes`
 --
 
-CREATE TABLE `zenorobe_tshirts` (
+CREATE TABLE `zenorobe_clothes` (
   `zenorobe_aid` int(11) NOT NULL,
   `zenorobe_is_active` tinyint(1) NOT NULL,
   `zenorobe_image` varchar(20) NOT NULL,
@@ -62,10 +62,10 @@ CREATE TABLE `zenorobe_tshirts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `zenorobe_tshirts`
+-- Dumping data for table `zenorobe_clothes`
 --
 
-INSERT INTO `zenorobe_tshirts` (`zenorobe_aid`, `zenorobe_is_active`, `zenorobe_image`, `zenorobe_title`, `zenorobe_price`, `zenorobe_category_id`, `zenorobe_datetime`, `zenorobe_created`) VALUES
+INSERT INTO `zenorobe_clothes` (`zenorobe_aid`, `zenorobe_is_active`, `zenorobe_image`, `zenorobe_title`, `zenorobe_price`, `zenorobe_category_id`, `zenorobe_datetime`, `zenorobe_created`) VALUES
 (1, 1, 'burger-1.webp', 'burger', '40', 1, '', 0);
 
 --
@@ -79,9 +79,9 @@ ALTER TABLE `zenorobe_category`
   ADD PRIMARY KEY (`category_aid`);
 
 --
--- Indexes for table `zenorobe_tshirts`
+-- Indexes for table `zenorobe_clothes`
 --
-ALTER TABLE `zenorobe_tshirts`
+ALTER TABLE `zenorobe_clothes`
   ADD PRIMARY KEY (`zenorobe_aid`);
 
 --
@@ -95,9 +95,9 @@ ALTER TABLE `zenorobe_category`
   MODIFY `category_aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `zenorobe_tshirts`
+-- AUTO_INCREMENT for table `zenorobe_clothes`
 --
-ALTER TABLE `zenorobe_tshirts`
+ALTER TABLE `zenorobe_clothes`
   MODIFY `zenorobe_aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 

@@ -16,8 +16,8 @@ RewriteRule ^category/active/([0-9]+)$ controllers/category/active.php?categoryi
 RewriteRule ^category/search$ controllers/category/search.php [L]
 RewriteRule ^category/page/([0-9]+)$ controllers/category/page.php?start=$1 [L]
 
-RewriteRule ^tshirts$ controllers/tshirts/tshirts.php [L]
-RewriteRule ^tshirts/([0-9]+)$ controllers/tshirts/tshirts.php?tshirtsid=$1 [L]
-RewriteRule ^tshirts/active/([0-9]+)$ controllers/tshirts/active.php?tshirtsid=$1 [L]
-RewriteRule ^tshirts/search$ controllers/tshirts/search.php [L]
-RewriteRule ^tshirts/page/([0-9]+)$ controllers/tshirts/page.php?start=$1 [L]
+RewriteRule ^clothes$ controllers/clothes/clothes.php [L]
+RewriteRule ^clothes/([0-9]+)$ controllers/clothes/clothes.php?clothesid=$1 [L]
+RewriteRule ^clothes/active/([0-9]+)$ controllers/clothes/active.php?clothesid=$1 [L]
+RewriteRule ^clothes/search$ controllers/clothes/search.php [L]
+RewriteRule ^clothes/page/([0-9]+)$ controllers/clothes/page.php?start=$1 [L]

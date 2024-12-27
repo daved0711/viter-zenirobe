@@ -3,19 +3,19 @@
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$tshirts = new Tshirts($conn);
+$clothes = new Clothes($conn);
 // get $_GET data
 $error = [];
 $returnData = [];
-if (array_key_exists("tshirtsid", $_GET)) {
+if (array_key_exists("clothesid", $_GET)) {
   // get data
-  $tshirts->tshirts_aid = $_GET['tshirtsid'];
-  checkId($tshirts->tshirts_aid);
+  $clothes->clothes_aid = $_GET['clothesid'];
+  checkId($clothes->clothes_aid);
   
 
-  $query = checkDelete($tshirts);
+  $query = checkDelete($clothes);
 
-  returnSuccess($tshirts, "Departments", $query);
+  returnSuccess($clothes, "Departments", $query);
 }
 
 // return 404 error if endpoint not available
